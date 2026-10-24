@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>Paso a Paso</title>
+<style>
+/* ===== COLORES (cámbialos aquí si quieres otro look) ===== */
+:root{
+  --bg:#eef3e6; --card:#fbfdf7; --ink:#24302a; --mut:#5f6f64;
+  --acc:#3d7a4d; --acc-ink:#ffffff; --soft:#dfecd6; --line:#d2dfc7;
+  --warn:#b4532f; --warnbg:#fbeae2;
+  /* colores del jardín */
+  --sky1:#dcefe4; --sky2:#f6f0d8; --sun:#f6d98a; --cloud:#ffffff;
+  --hill1:#a6cf8b; --hill2:#8dbb7a;
+  --leaf1:#4f9a5b; --leaf2:#7cb76b; --leaf3:#2f7a52;
+  --pot:#c9774f; --pot2:#a85f3b; --petal:#f4a6c0; --petal2:#f2cc8f;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#101812; --card:#18231b; --ink:#e6eee6; --mut:#9db0a1;
+    --acc:#7cc78c; --acc-ink:#0b1a10; --soft:#223a28; --line:#2a3b2f;
+    --warn:#f0a07e; --warnbg:#3a2820;
+    --sky1:#14242a; --sky2:#22332a; --sun:#d5dcb8; --cloud:#9db0a1;
+    --hill1:#2c4a35; --hill2:#244030;
+    --leaf1:#5fae6e; --leaf2:#86c47a; --leaf3:#3f9267;
+    --pot:#b8704b; --pot2:#9a5836; --petal:#e48fae; --petal2:#e0b878; }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+header{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;
+  border-bottom:1px solid var(--line);background:var(--bg)}
+#ttl{flex:1;font-weight:700;font-size:18px}
+#back{display:none;background:none;border:0;color:var(--ink);font-size:28px;line-height:1;padding:0 8px 4px 0}
+.sos{background:var(--warnbg);color:var(--warn);border:1px solid var(--warn);border-radius:20px;
+  padding:6px 12px;font-weight:600;font-size:14px}
+main{flex:1;overflow-y:auto;padding:14px 14px 24px;-webkit-overflow-scrolling:touch}
+nav{display:flex;border-top:1px solid var(--line);background:var(--card);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;padding:8px 0 6px;color:var(--mut);font-size:11px;display:flex;
+  flex-direction:column;align-items:center;gap:2px}
+nav button.on{color:var(--acc);font-weight:700}
+nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+h2{font-size:22px;margin:4px 0 12px}
+h3{font-size:17px;margin:18px 0 8px}
+p{margin:6px 0}
+.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.card.soft{background:var(--soft);border-color:transparent}
+.card.warn{background:var(--warnbg);border-color:var(--warn)}
+.btn{display:block;width:100%;background:var(--acc);color:var(--acc-ink);border:0;border-radius:14px;
+  padding:13px 14px;font-size:16px;font-weight:600;margin-top:10px;text-align:center;text-decoration:none}
+.btn.sec{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{width:auto;display:inline-block;padding:9px 14px;font-size:14px;margin-right:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-block;background:var(--soft);color:var(--acc);border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600}
+.moods{display:flex;gap:6px;margin-top:8px}
+.moods button{flex:1;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:8px 0;font-size:26px}
+.moods button.on{border-color:var(--acc);background:var(--soft)}
+.moods small{display:block;font-size:10px;color:var(--mut)}
+.item{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);color:var(--ink);
+  border-radius:16px;padding:13px 14px;margin:0 0 10px;font-size:16px}
+.item b{display:block}
+.item span{color:var(--mut);font-size:14px}
+textarea,input[type=text],input[type=time]{width:100%;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);
+  border-radius:12px;padding:10px;font:inherit;margin-top:4px}
+textarea{min-height:76px;resize:vertical}
+label{display:block;font-weight:600;font-size:14px;margin-top:12px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.big{font-size:20px;line-height:1.4}
+.orb{width:180px;height:180px;border-radius:50%;margin:18px auto;background:var(--soft);border:3px solid var(--acc);
+  display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--acc);transform:scale(.6)}
+.orb.run{animation:resp 10s ease-in-out infinite}
+@keyframes resp{0%{transform:scale(.6)}40%{transform:scale(1)}100%{transform:scale(.6)}}
+canvas{display:block;margin:0 auto;border:1px solid var(--line);border-radius:16px;background:var(--card);touch-action:none}
+.swatches{display:flex;gap:10px;justify-content:center;margin:12px 0}
+.swatches button{width:34px;height:34px;border-radius:50%;border:3px solid transparent}
+.swatches button.on{border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:12px auto}
+.carta{aspect-ratio:1;border-radius:14px;border:1.5px solid var(--line);background:var(--acc);font-size:30px;padding:0}
+.carta span{visibility:hidden}
+.carta.up{background:var(--card)} .carta.up span{visibility:visible}
+.carta.ok{background:var(--soft);border-color:var(--acc)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
+.switch input{width:22px;height:22px;accent-color:var(--acc)}
+.slot{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.slot .n{flex:1}
+.slot input[type=time]{width:120px;margin:0}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 76px);transform:translateX(-50%);background:var(--ink);
+  color:var(--bg);padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:88%;text-align:center}
+#toast.on{opacity:1}
+ul.clean{padding-left:20px;margin:6px 0}
+.nota{border-top:1px solid var(--line);padding:8px 0;font-size:14px}
+
+/* ===== Look de naturaleza ===== */
+.card,.item{border-radius:22px}
+.btn{border-radius:999px}
+.card.soft{background:var(--soft)}
+header{background:linear-gradient(180deg,var(--soft),var(--bg))}
+#ttl{display:flex;align-items:center;gap:8px}
+#ttl svg{width:22px;height:22px;fill:var(--acc);flex:none}
+.deco{position:fixed;pointer-events:none;color:var(--acc);opacity:.13;z-index:0}
+.deco.d1{right:-18px;top:56px;width:150px;transform:rotate(18deg)}
+.deco.d2{left:-24px;bottom:64px;width:170px;transform:scaleX(-1) rotate(8deg)}
+main,header,nav{position:relative;z-index:1}
+
+/* ===== Jardín táctil ===== */
+.jcard{padding:6px}
+.jar{width:100%;height:auto;display:block;border-radius:18px;touch-action:none;user-select:none;-webkit-user-select:none}
+.pl{cursor:pointer}
+.sw{animation:brisa 7s ease-in-out infinite;animation-delay:var(--d,0s)}
+.sw.toco{animation:sacude .9s ease-out}
+@keyframes brisa{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+@keyframes sacude{0%{transform:rotate(0)}20%{transform:rotate(-7deg)}45%{transform:rotate(5.5deg)}70%{transform:rotate(-3deg)}100%{transform:rotate(0)}}
+.gr.nuevo{animation:crece 1.4s cubic-bezier(.2,.8,.3,1.2) both}
+@keyframes crece{from{transform:scale(0)}to{transform:scale(1)}}
+.hoja{animation:flota 1.8s ease-out forwards;pointer-events:none}
+@keyframes flota{0%{opacity:.95;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),-46px) rotate(var(--rot))}}
+@media (prefers-reduced-motion:reduce){.sw{animation:none}}
+</style>
+</head>
+<body>
+<!-- hojas decorativas de fondo -->
+<svg class="deco d1" viewBox="0 0 120 120" aria-hidden="true"><g fill="currentColor"><path d="M60 118 C58 80 62 40 100 6 C104 50 90 90 60 118Z"/><ellipse cx="34" cy="72" rx="9" ry="24" transform="rotate(-38 34 72)"/><ellipse cx="26" cy="46" rx="7" ry="19" transform="rotate(-55 26 46)"/><ellipse cx="90" cy="84" rx="8" ry="20" transform="rotate(40 90 84)"/></g></svg>
+<svg class="deco d2" viewBox="0 0 120 120" aria-hidden="true"><g fill="currentColor"><path d="M60 118 C58 80 62 40 100 6 C104 50 90 90 60 118Z"/><ellipse cx="34" cy="72" rx="9" ry="24" transform="rotate(-38 34 72)"/><ellipse cx="26" cy="46" rx="7" ry="19" transform="rotate(-55 26 46)"/><ellipse cx="90" cy="84" rx="8" ry="20" transform="rotate(40 90 84)"/></g></svg>
+<header>
+  <button id="back" data-a="back" aria-label="Volver">‹</button>
+  <div id="ttl">Paso a Paso</div>
+  <button class="sos" data-a="nav" data-v="ayuda">Ayuda ahora</button>
+</header>
+<main id="view"></main>
+<nav id="tabs"></nav>
+<div id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   PASO A PASO — app personal de apoyo para el ánimo
+   Cómo está organizado este archivo (para que lo puedas modificar):
+     1. CONTENIDO  → los textos: ideas de acciones, avisos, ejercicios.
+     2. DATOS      → guardar/leer lo que anotas (queda solo en tu celular).
+     3. AVISOS     → programar las notificaciones del celular.
+     4. PANTALLAS  → cada pantalla de la app.
+     5. ARRANQUE   → enciende todo.
+   Esta app NO reemplaza a tu tratamiento. Es un apoyo para los días.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. CONTENIDO
+   Para agregar una idea, copia una línea y cambia el texto.
+   El "id" debe ser único. "min" es la versión mínima, para días pesados.
+   --------------------------------------------------------------------- */
+const ACCIONES = [
+  {id:'luz',     tipo:'cuerpo',   t:'Sal 2 minutos a que te dé la luz del día',            min:'Abre una ventana y mira afuera 30 segundos'},
+  {id:'agua',    tipo:'cuerpo',   t:'Toma un vaso de agua y estira el cuerpo 3 minutos',    min:'Solo el vaso de agua'},
+  {id:'camina',  tipo:'movimiento',t:'Camina 10 minutos, aunque sea por tu cuadra',          min:'Sal a la puerta y camina hasta la esquina'},
+  {id:'ducha',   tipo:'cuerpo',   t:'Lávate la cara o dúchate y ponte ropa cómoda',         min:'Solo lávate la cara con agua fresca'},
+  {id:'orden',   tipo:'hacer',    t:'Ordena una sola cosa: un cajón, la mesa o una repisa', min:'Guarda un solo objeto en su lugar'},
+  {id:'mensaje', tipo:'personas', t:'Envíale un mensaje corto a alguien: "¿cómo estás?"',   min:'Mira el chat de alguien y ponle un emoji'},
+  {id:'comida',  tipo:'cuerpo',   t:'Prepárate algo simple que te guste y come sin pantalla',min:'Come una fruta o algo pequeño sentada'},
+  {id:'musica',  tipo:'disfrute', t:'Pon una canción que te guste y escúchala completa',    min:'Pon solo el principio de una canción'},
+  {id:'cinco',   tipo:'hacer',    t:'Regla de los 5 minutos: empieza una tarea pendiente y puedes parar al terminar el tiempo', min:'Abre lo que tengas pendiente y mírelo 1 minuto'},
+  {id:'hecho',   tipo:'mente',    t:'Anota una cosa que ya hiciste hoy, aunque parezca chica', min:'Dila en voz alta, solo una'},
+  {id:'planta',  tipo:'disfrute', t:'Cuida algo vivo: riega una planta o mira el cielo 2 minutos', min:'Mira por la ventana 1 minuto'},
+  {id:'risa',    tipo:'disfrute', t:'Mira un video corto que te dé risa o ternura',         min:'Busca una sola foto que te guste'},
+  {id:'salir',   tipo:'movimiento',t:'Haz un mandado pequeño: salir a comprar algo, aunque sea poco', min:'Sal a la puerta y respira 1 minuto'},
+  {id:'estirar', tipo:'movimiento',t:'Estira cuello, hombros y espalda al ritmo de una canción', min:'Gira los hombros 10 veces'}
+];
+
+/* Opciones para "Hoy está muy pesado": lo más pequeño posible */
+const PESADO = [
+  {t:'Tomar un vaso de agua', go:null},
+  {t:'Respirar 3 minutos con la app', go:'respirar'},
+  {t:'Mirar por la ventana 1 minuto y nombrar 3 cosas que ves', go:null},
+  {t:'Mandarle un emoji a alguien', go:null},
+  {t:'Dibujar trazos lentos sin pensar', go:'trazo'}
+];
+
+/* Ejercicios mentales cortos (dirigen la atención a algo concreto) */
+const MENTE = [
+  'Cuenta hacia atrás de 7 en 7 desde 100, en voz baja.',
+  'Di un animal por cada letra del abecedario.',
+  'Nombra 10 cosas rojas que veas o recuerdes.',
+  'Describe el camino de tu casa a la plaza más cercana, con todos los detalles, como si se lo contaras a alguien que no lo conoce.',
+  'Recuerda un día de verano que disfrutaste: ¿qué olores, sonidos y temperatura había?',
+  'Inventa una receta usando solo 3 ingredientes que tengas en tu cocina.',
+  'Escribe en un papel 5 cosas que sabes hacer bien.',
+  'Ordena los meses del año de menor a mayor número de letras.',
+  'Escribe tu nombre despacio con la mano que no usas normalmente.',
+  'Nombra 5 lugares de Chile donde te gustaría ir y una cosa que harías en cada uno.',
+  'Mira el objeto que tengas más cerca y descríbelo con 10 palabras distintas.',
+  'Tararea una canción completa en tu mente y marca el ritmo con un dedo.',
+  'Piensa en 5 comidas que empiecen con la letra de tu nombre.',
+  'Dibuja de memoria, en un papel, el objeto que ves en tu mesa.'
+];
+
+/* Avisos del celular. Hay 4 momentos del día (m, d, t, n).
+   Cada día la app elige uno distinto de cada lista.
+   "go" es la pantalla que se abre al tocar el aviso. */
+const NOTIFS = {
+  m:[
+    {t:'Una cosa pequeña para hoy', b:'Sal 2 minutos a que te dé la luz del día. Con eso basta por ahora.', go:'hoy'},
+    {t:'Empieza por lo mínimo', b:'Toma un vaso de agua y estira el cuerpo 1 minuto.', go:'hoy'},
+    {t:'Buenos días, sin presión', b:'Elige una sola cosa para hoy. Una cosa pequeña cuenta.', go:'hoy'},
+    {t:'Cuerpo primero', b:'Lávate la cara o dúchate. A veces el ánimo sigue al cuerpo.', go:'hoy'},
+    {t:'Ordena una sola cosa', b:'Un cajón, la mesa, una repisa. Solo una.', go:'hoy'},
+    {t:'Pon una canción', b:'Una que te guste, completa. Es una buena forma de partir.', go:'hoy'}
+  ],
+  d:[
+    {t:'Muévete 10 minutos', b:'Camina aunque sea por tu cuadra. El movimiento suave ayuda al ánimo.', go:'hoy'},
+    {t:'Un mensaje corto', b:'Escríbele a alguien: "¿cómo estás?". No tiene que ser largo.', go:'hoy'},
+    {t:'Come con calma', b:'Algo simple, sentada, sin pantalla.', go:'hoy'},
+    {t:'Pausa de 3 minutos', b:'Respira con la app. No hay que hacerlo perfecto.', go:'respirar'},
+    {t:'Luz del día', b:'Si no has salido hoy, sal 2 minutos a la puerta o la ventana.', go:'hoy'},
+    {t:'Regla de los 5 minutos', b:'Empieza algo pendiente y puedes parar cuando suene tu tiempo.', go:'hoy'}
+  ],
+  t:[
+    {t:'¿Estás dando vueltas a algo?', b:'Si es así, abre "Salir del bucle": 3 minutos para cambiar de carril.', go:'bucle'},
+    {t:'Algo que absorba tu atención', b:'Dibuja un mandala o juega memoria 5 minutos.', go:'jugar'},
+    {t:'Anclaje 5-4-3-2-1', b:'Si la cabeza va muy rápido, vuelve a los sentidos.', go:'anclaje'},
+    {t:'Un ejercicio mental corto', b:'Cuenta de 7 en 7 hacia atrás desde 100.', go:'mente'},
+    {t:'Trazos lentos', b:'Sigue el punto con el dedo y respira lento.', go:'trazo'},
+    {t:'Pausa de 3 minutos', b:'Respirar con la app te toma 3 minutos.', go:'respirar'}
+  ],
+  n:[
+    {t:'Tres cosas que salieron bien', b:'Aunque hayan sido mínimas. Anótalas.', go:'gracias'},
+    {t:'Cierre del día', b:'Si hoy hiciste algo, por pequeño que sea, cuenta.', go:'hoy'},
+    {t:'Háblate como a una amiga', b:'¿Qué le dirías a alguien querido que se sintiera como tú hoy?', go:'compasion'},
+    {t:'Para dormir mejor', b:'Deja la pantalla 30 minutos antes de acostarte. Mañana, levántate a tu hora de siempre.', go:'hoy'},
+    {t:'¿Cómo estuvo tu ánimo hoy?', b:'Anótalo en 5 segundos. Sirve para ver cómo vas.', go:'hoy'}
+  ]
+};
+
+/* Momentos del día para los avisos (hora por defecto, la puedes cambiar en Ajustes) */
+const SLOTS = [
+  {k:'m', nombre:'Mañana',   t:'09:30'},
+  {k:'d', nombre:'Mediodía', t:'13:30'},
+  {k:'t', nombre:'Tarde',    t:'17:30'},
+  {k:'n', nombre:'Noche',    t:'21:00'}
+];
+
+const ANIMOS = [['😞','Muy bajo'],['😕','Bajo'],['😐','Regular'],['🙂','Bien'],['😊','Muy bien']];
+const ALIENTO = [
+  'Eso cuenta. Actuar un poco suele mover el ánimo más que esperar a tener ganas.',
+  'Hecho. Lo pequeño también es avanzar.',
+  'Bien. No tenía que ser perfecto, solo empezar.',
+  'Gracias por hacerlo hoy, aunque no tuvieras ganas.'
+];
+const COLORES = ['#c8553d','#e9b44c','#6a994e','#a7c957','#7fb7be','#e48fae'];
+
+/* ---------------------------------------------------------------------
+   2. DATOS (se guardan solo en este celular)
+   --------------------------------------------------------------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('pp_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('pp_'+k, JSON.stringify(v)); }catch(e){} }
+};
+const hoyKey = (d=new Date()) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const diaNum = () => { const d=new Date(); return Math.floor(new Date(d.getFullYear(),d.getMonth(),d.getDate())/864e5); };
+const moods  = () => store.get('animos', {});
+const hechas = () => store.get('hechas', []);
+const notas  = () => store.get('notas', []);
+function ajustes(){
+  const base = {visto:false, slots:{}};
+  SLOTS.forEach(s => base.slots[s.k] = {on:true, t:s.t});
+  const g = store.get('ajustes', base);
+  SLOTS.forEach(s => { if(!g.slots[s.k]) g.slots[s.k] = {on:true, t:s.t}; });
+  return g;
+}
+function accionDelDia(){
+  const sk = store.get('skip', {d:'', n:0});
+  const n = sk.d === hoyKey() ? sk.n : 0;
+  return ACCIONES[(diaNum() + n) % ACCIONES.length];
+}
+const yaHecha = id => hechas().some(h => h.d===hoyKey() && h.id===id);
+function animoBajoSeguido(){
+  const M = moods();
+  for(let i=0;i<3;i++){ const d=new Date(); d.setDate(d.getDate()-i); const v=M[hoyKey(d)]; if(!v || v>2) return false; }
+  return true;
+}
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),2600); }
+
+/* ---------------------------------------------------------------------
+   3. AVISOS (notificaciones locales del celular)
+   Se programan los próximos 21 días. Cada vez que abres la app se
+   reprograman, así que abre la app de vez en cuando.
+   --------------------------------------------------------------------- */
+const LN = (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.LocalNotifications) || null;
+
+async function programar(pedirPermiso){
+  if(!LN) return {ok:false, msg:'Los avisos solo funcionan en la app instalada en el celular, no en el navegador.'};
+  try{
+    let p = await LN.checkPermissions();
+    if(p.display !== 'granted'){
+      if(!pedirPermiso) return {ok:false, msg:'Faltan permisos de notificación.'};
+      p = await LN.requestPermissions();
+    }
+    if(p.display !== 'granted')
+      return {ok:false, msg:'No diste permiso. Puedes activarlo en Ajustes del celular → Apps → Paso a Paso → Notificaciones.'};
+    try{ await LN.createChannel({id:'animo', name:'Recordatorios de ánimo', description:'Pequeñas ideas durante el día', importance:3, visibility:1, vibration:true}); }catch(e){}
+    const pend = await LN.getPending();
+    if(pend.notifications && pend.notifications.length) await LN.cancel({notifications: pend.notifications});
+    const S = ajustes(), ahora = new Date(), lista = [];
+    let id = 1;
+    for(let dia=0; dia<21; dia++){
+      SLOTS.forEach((slot, idx) => {
+        const cfg = S.slots[slot.k];
+        if(!cfg.on) return;
+        const [h, m] = cfg.t.split(':').map(Number);
+        const at = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate()+dia, h, m, 0);
+        if(at <= ahora) return;
+        const pool = NOTIFS[slot.k];
+        const n = pool[(diaNum() + dia + idx*2) % pool.length];
+        lista.push({id:id++, title:n.t, body:n.b, channelId:'animo', schedule:{at, allowWhileIdle:true}, extra:{go:n.go}});
+      });
+    }
+    if(lista.length) await LN.schedule({notifications: lista});
+    const s2 = ajustes(); s2.visto = true; store.set('ajustes', s2);
+    return {ok:true, msg: lista.length ? `Listo: ${lista.length} avisos programados para las próximas 3 semanas.` : 'No hay avisos activados.'};
+  }catch(e){
+    return {ok:false, msg:'No se pudo programar: ' + ((e && e.message) || e)};
+  }
+}
+async function avisoDePrueba(){
+  if(!LN) return {ok:false, msg:'La prueba solo funciona en la app instalada.'};
+  try{
+    let p = await LN.checkPermissions();
+    if(p.display !== 'granted') p = await LN.requestPermissions();
+    if(p.display !== 'granted') return {ok:false, msg:'Falta el permiso de notificaciones.'};
+    try{ await LN.createChannel({id:'animo', name:'Recordatorios de ánimo', importance:3, visibility:1, vibration:true}); }catch(e){}
+    await LN.schedule({notifications:[{id:999999, title:'Prueba de Paso a Paso', body:'Si ves esto, los avisos funcionan.', channelId:'animo',
+      schedule:{at:new Date(Date.now()+5000), allowWhileIdle:true}, extra:{go:'hoy'}}]});
+    return {ok:true, msg:'Te llegará un aviso en 5 segundos. Puedes bloquear la pantalla para ver cómo se ve.'};
+  }catch(e){ return {ok:false, msg:'Error: ' + ((e && e.message) || e)}; }
+}
+if(LN){
+  LN.addListener('localNotificationActionPerformed', ev => {
+    const go = ev && ev.notification && ev.notification.extra && ev.notification.extra.go;
+    if(go) nav(go, true);
+  });
+}
+
+/* ---------------------------------------------------------------------
+   4. PANTALLAS
+   --------------------------------------------------------------------- */
+const TABS = [
+  {id:'hoy',     n:'Hoy',     i:'<path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/><circle cx="12" cy="12" r="4"/>'},
+  {id:'pensar',  n:'Pensar',  i:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'},
+  {id:'jugar',   n:'Jugar',   i:'<path d="M4 20c4-1 5-4 6-7l5-5 3 3-5 5c-3 1-6 2-9 4z"/><path d="M14 6l3-3 4 4-3 3"/>'},
+  {id:'avance',  n:'Avance',  i:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>'},
+  {id:'ajustes', n:'Ajustes', i:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'}
+];
+let ST = {};          // estado temporal de la pantalla actual
+let cleanup = null;   // función para detener cosas (timers) al salir de una pantalla
+
+const SCREENS = {};
+
+/* ---------------------------------------------------------------------
+   JARDÍN TÁCTIL
+   Las plantas se dibujan con SVG. Cada una "se desbloquea" cuando
+   llegas a cierta cantidad de puntos (u). Los puntos suman:
+   cosas pequeñas hechas + registros de ánimo + notas guardadas.
+   El jardín solo crece: nunca se marchita ni pierde plantas.
+   Para cambiar cuándo aparece cada planta, edita "u" aquí abajo.
+   --------------------------------------------------------------------- */
+const JARDIN = [
+  {k:'suculenta', x:180, s:1.00, u:0,  d:0,   v:0},
+  {k:'helecho',   x:100, s:1.00, u:1,  d:1.2, v:0},
+  {k:'flor',      x:262, s:1.00, u:3,  d:2.1, v:0},
+  {k:'monstera',  x:44,  s:0.72, u:6,  d:0.6, v:0},
+  {k:'hierba',    x:325, s:1.00, u:10, d:1.7, v:0},
+  {k:'suculenta', x:138, s:0.65, u:15, d:0.3, v:1},
+  {k:'flor',      x:222, s:0.70, u:21, d:2.6, v:1},
+  {k:'hierba',    x:72,  s:0.90, u:28, d:0.9, v:1}
+];
+const maceta = () => '<path d="M-20 -20 L20 -20 L16 0 L-16 0Z" fill="var(--pot)"/><rect x="-23" y="-26" width="46" height="9" rx="3" fill="var(--pot2)"/>';
+const HJ = 'M0 -6 C-30 -2 -40 -30 -22 -46 C-14 -54 -6 -58 0 -62 C6 -58 14 -54 22 -46 C40 -30 30 -2 0 -6Z';
+const VN = 'M0 -6 L0 -56 M0 -22 L-17 -32 M0 -22 L17 -32 M0 -38 L-12 -46 M0 -38 L12 -46';
+const hojaGrande = (c, t) => `<g transform="${t}"><path d="${HJ}" fill="${c}"/><path d="${VN}" stroke="var(--leaf3)" stroke-width="1.3" fill="none" opacity=".6"/></g>`;
+const PLANTAS = {
+  suculenta(v){
+    const a = v?'var(--leaf2)':'var(--leaf1)', b = v?'var(--leaf1)':'var(--leaf2)'; let s='';
+    [-72,-48,-24,0,24,48,72].forEach((g,i)=>{ s += `<ellipse cx="0" cy="-36" rx="9" ry="23" fill="${i%2?b:a}" transform="rotate(${g} 0 -14)"/>`; });
+    [-36,0,36].forEach(g=>{ s += `<ellipse cx="0" cy="-30" rx="6" ry="16" fill="var(--leaf3)" opacity=".85" transform="rotate(${g} 0 -14)"/>`; });
+    return s + maceta();
+  },
+  helecho(v){
+    const c = v?'var(--leaf2)':'var(--leaf1)'; let s='';
+    [-58,-30,0,30,58].forEach(g=>{
+      let f = '<path d="M0 -22 L0 -92" stroke="var(--leaf3)" stroke-width="2" fill="none"/>';
+      for(let y=-30; y>-90; y-=7){
+        const l = 13*(1-((-y-30)/60)*0.65);
+        f += `<ellipse cx="${-l/2-1}" cy="${y}" rx="${l/2}" ry="2.6" fill="${c}" transform="rotate(-22 -1 ${y})"/><ellipse cx="${l/2+1}" cy="${y}" rx="${l/2}" ry="2.6" fill="${c}" transform="rotate(22 1 ${y})"/>`;
+      }
+      s += `<g transform="rotate(${g} 0 -22)">${f}</g>`;
+    });
+    return s + maceta();
+  },
+  flor(v){
+    const p = v?'var(--petal2)':'var(--petal)';
+    let s = '<path d="M0 -20 Q-7 -52 0 -84" stroke="var(--leaf3)" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    s += '<ellipse cx="-11" cy="-44" rx="11" ry="5" fill="var(--leaf1)" transform="rotate(-28 -11 -44)"/><ellipse cx="9" cy="-58" rx="10" ry="4.5" fill="var(--leaf2)" transform="rotate(26 9 -58)"/>';
+    for(let i=0;i<8;i++) s += `<ellipse cx="0" cy="-97" rx="6" ry="11" fill="${p}" transform="rotate(${i*45} 0 -86)"/>`;
+    return s + '<circle cx="0" cy="-86" r="6" fill="#e9b44c"/>' + maceta();
+  },
+  monstera(v){
+    const a = v?'var(--leaf2)':'var(--leaf1)', b = v?'var(--leaf1)':'var(--leaf2)';
+    let s = '<g stroke="var(--leaf3)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M0 -20 L0 -34"/><path d="M0 -20 Q-14 -30 -24 -40"/><path d="M0 -20 Q14 -30 24 -40"/></g>';
+    s += hojaGrande(b,'translate(-24 -38) rotate(-38) scale(.85)') + hojaGrande(b,'translate(24 -38) rotate(38) scale(.85)') + hojaGrande(a,'translate(0 -32) scale(1.05)');
+    return s + maceta();
+  },
+  hierba(v){
+    let s=''; const xs=[-16,-11,-6,-2,2,6,11,16];
+    xs.forEach((x,i)=>{ const h=34+((i*7)%5)*8, lean=((i%3)-1)*8;
+      s += `<path d="M${x} 4 Q${x+lean*0.4} ${-h/2} ${x+lean} ${-h}" stroke="${i%2?'var(--leaf1)':'var(--leaf2)'}" stroke-width="3" stroke-linecap="round" fill="none"/>`; });
+    if(v) s += '<circle cx="-7" cy="-50" r="4" fill="var(--petal2)"/><circle cx="9" cy="-44" r="3.5" fill="var(--petal)"/>';
+    return s;
+  }
+};
+const puntosJardin = () => hechas().length + notas().length + Object.keys(moods()).length;
+const plantasVisibles = () => JARDIN.filter(p => puntosJardin() >= p.u).length;
+function jardinSVG(){
+  const n = plantasVisibles(), visto = store.get('jvisto', null);
+  let s = `<svg id="jar" class="jar" viewBox="0 0 360 200" role="img" aria-label="Tu jardín: ${n} de ${JARDIN.length} plantas. Toca las plantas para moverlas.">
+    <defs><linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient></defs>
+    <rect width="360" height="200" fill="url(#cielo)"/>
+    <circle cx="302" cy="40" r="20" fill="var(--sun)" opacity=".9"/>
+    <g fill="var(--cloud)" opacity=".5"><ellipse cx="70" cy="34" rx="30" ry="9"/><ellipse cx="92" cy="28" rx="20" ry="8"/><ellipse cx="210" cy="52" rx="24" ry="7"/></g>
+    <path d="M0 150 Q80 128 170 146 T360 140 V200 H0Z" fill="var(--hill2)"/>
+    <path d="M0 172 Q100 160 200 172 T360 168 V200 H0Z" fill="var(--hill1)"/>`;
+  JARDIN.forEach((p,i) => {
+    if(i >= n) return;
+    const nuevo = (visto !== null && i >= visto) ? ' nuevo' : '';
+    s += `<g class="pl" transform="translate(${p.x} 178) scale(${p.s})"><g class="gr${nuevo}"><g class="sw" style="--d:${p.d}s">${PLANTAS[p.k](p.v)}</g></g></g>`;
+  });
+  return s + '</svg>';
+}
+function jardinInit(){
+  const svg = $('#jar'); if(!svg) return;
+  const n = plantasVisibles(), visto = store.get('jvisto', null);
+  if(visto === null) store.set('jvisto', n);
+  else if(n > visto){ store.set('jvisto', n); toast('Creció una planta nueva en tu jardín 🌱'); }
+  const NS = 'http://www.w3.org/2000/svg';
+  let ultimo = 0;
+  const aSvg = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; return pt.matrixTransform(svg.getScreenCTM().inverse()); };
+  const toca = e => {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const pl = el && el.closest && el.closest('.pl'); if(!pl) return;
+    const sw = pl.querySelector('.sw');
+    if(!sw.classList.contains('toco')){ sw.classList.add('toco'); sw.addEventListener('animationend', () => sw.classList.remove('toco'), {once:true}); }
+    const ahora = Date.now(); if(ahora - ultimo < 110) return; ultimo = ahora;
+    try{ if(navigator.vibrate) navigator.vibrate(8); }catch(_){}
+    let p; try{ p = aSvg(e); }catch(_){ return; }
+    const g = document.createElementNS(NS,'g'); g.setAttribute('transform', `translate(${p.x} ${p.y})`);
+    const h = document.createElementNS(NS,'path');
+    h.setAttribute('d','M0 0 C4 -4 10 -3 12 2 C7 5 2 5 0 0Z');
+    h.setAttribute('class','hoja');
+    h.setAttribute('fill', Math.random()<.5 ? 'var(--leaf2)' : 'var(--petal)');
+    h.style.setProperty('--dx', (Math.random()*40-20)+'px');
+    h.style.setProperty('--rot', (Math.random()*240-120)+'deg');
+    g.appendChild(h); svg.appendChild(g);
+    h.addEventListener('animationend', () => g.remove());
+  };
+  svg.addEventListener('pointerdown', toca);
+  svg.addEventListener('pointermove', e => { if(e.buttons || e.pointerType === 'touch') toca(e); });
+}
+
+/* ---- HOY ---- */
+SCREENS.hoy = {title:'Hoy', tab:'hoy',
+  init(){ jardinInit(); },
+  html(){
+    const a = accionDelDia(), hecha = yaHecha(a.id), m = moods()[hoyKey()];
+    const hr = new Date().getHours();
+    const saludo = hr<6 ? 'Buenas noches' : hr<13 ? 'Buenos días' : hr<20 ? 'Buenas tardes' : 'Buenas noches';
+    const nHoy = hechas().filter(h => h.d===hoyKey()).length;
+    return `
+    ${!ajustes().visto ? `<div class="card soft"><b>Activa los avisos</b>
+      <p class="mut">Te mandaré recordatorios pequeños 4 veces al día. Puedes cambiar horas o apagar los que no quieras en Ajustes.</p>
+      <button class="btn" data-a="activar">Activar avisos</button></div>` : ''}
+    <h2>${saludo}</h2>
+    <div class="card jcard">${jardinSVG()}
+      <p class="mut" style="margin:8px 6px 4px">Toca las plantas. Tu jardín crece con cada cosa pequeña que haces y nunca se marchita.</p></div>
+    <div class="card">
+      <span class="chip">${esc(a.tipo)}</span>
+      <p class="big" style="margin-top:8px">${esc(ST.minima ? a.min : a.t)}</p>
+      <p class="mut">${ST.minima ? 'Versión mínima. Si es lo único que haces hoy, ya está bien.' : 'Actuar primero, aunque no tengas ganas, suele mover el ánimo más que esperar a sentirte mejor.'}</p>
+      ${hecha ? `<p><b>✓ Hecho hoy.</b> ${esc(ALIENTO[diaNum()%ALIENTO.length])}</p>` :
+        `<button class="btn" data-a="hecho" data-id="${a.id}">Hecho ✓</button>`}
+      <div class="row" style="margin-top:8px">
+        ${ST.minima ? '' : `<button class="btn sec small" data-a="minima">Hazlo más pequeño</button>`}
+        <button class="btn sec small" data-a="otra">Otra idea</button>
+      </div>
+    </div>
+    <div class="card">
+      <b>¿Cómo estás ahora?</b>
+      <div class="moods">${ANIMOS.map((x,i)=>`<button data-a="animo" data-v="${i+1}" class="${m===i+1?'on':''}" aria-label="${x[1]}">${x[0]}<small>${x[1]}</small></button>`).join('')}</div>
+      <p class="mut">${nHoy ? `Cosas pequeñas hechas hoy: ${nHoy}.` : 'Los días malos también se anotan: sirven para ver el panorama.'}</p>
+    </div>
+    ${animoBajoSeguido() ? `<div class="card warn"><b>Llevas varios días con el ánimo bajo.</b>
+      <p>Si puedes, cuéntaselo a tu psiquiatra o psicólogo, o pide una hora antes de la próxima si sientes que lo necesitas.</p>
+      <button class="btn sec" data-a="nav" data-v="ayuda">Ver dónde pedir ayuda</button></div>` : ''}
+    <button class="item" data-a="nav" data-v="bucle"><b>Mi mente da vueltas a lo mismo</b><span>3 minutos para cambiar de carril</span></button>
+    <button class="item" data-a="nav" data-v="pesado"><b>Hoy está muy pesado</b><span>Opciones mínimas: elige una sola</span></button>`;
+  }};
+
+/* ---- HOY ESTÁ MUY PESADO ---- */
+SCREENS.pesado = {title:'Día pesado', tab:'hoy',
+  html(){
+    return `<h2>No tienes que hacer todo</h2>
+    <p>Hay días en que lo normal cuesta el doble. Elige <b>una</b> de estas y listo:</p>
+    ${PESADO.map((p,i)=>`<button class="item" data-a="${p.go?'nav':'pesadoHecho'}" data-v="${p.go||''}"><b>${esc(p.t)}</b></button>`).join('')}
+    <p class="mut">Si además sientes que no puedes más, usa el botón "Ayuda ahora" de arriba.</p>`;
+  }};
+
+/* ---- PENSAR (lista) ---- */
+SCREENS.pensar = {title:'Pensar', tab:'pensar',
+  html(){
+    const it = (id,t,d)=>`<button class="item" data-a="nav" data-v="${id}"><b>${t}</b><span>${d}</span></button>`;
+    return `
+    <h3 style="margin-top:2px">Si estás dando vueltas a un pensamiento</h3>
+    ${it('bucle','Salir del bucle','3 min · pasar de "¿por qué?" a "¿qué paso pequeño?"')}
+    ${it('anclaje','Anclaje 5-4-3-2-1','2 min · volver a los sentidos')}
+    ${it('respirar','Respiración de 3 minutos','3 min · pausa guiada')}
+    <h3>Mirar las cosas de otra forma</h3>
+    ${it('registro','Registro de pensamiento','5–10 min · revisar un pensamiento que pesa')}
+    ${it('compasion','Háblate como a una amiga','3 min · autocompasión')}
+    <h3>Notar lo que sí hay</h3>
+    ${it('gracias','Tres cosas que salieron bien','2 min · se guardan para releerlas')}
+    ${it('mente','Ejercicios mentales cortos','1–3 min · tareas que ocupan la cabeza')}`;
+  }};
+
+/* ---- SALIR DEL BUCLE (rumiación) ---- */
+const PASOS_BUCLE = [
+  {t:'1. Ponle nombre', c:'<p class="big">"Estoy rumiando. Esto es mi mente dando vueltas, no un hecho."</p><p class="mut">Notar el patrón ya es el primer paso: te separa un poco del pensamiento.</p>'},
+  {t:'2. De "¿por qué?" a "¿qué paso pequeño?"', c:'<p>Preguntarse una y otra vez "¿por qué me pasa esto?" suele empeorar el ánimo. Prueba otra pregunta:</p><label>¿Hay algún paso concreto y pequeño que pueda dar hoy sobre esto?</label><textarea placeholder="Si no hay ninguno, escribe: ahora no hay nada que hacer"></textarea><p class="mut">Esto no se guarda; es solo para ordenar tu cabeza.</p>'},
+  {t:'3. Hazlo concreto', c:'<p>Los pensamientos vagos ("todo sale mal") pesan más que los concretos.</p><label>¿Qué pasó exactamente? ¿Cuándo, dónde? Solo hechos.</label><textarea></textarea>'},
+  {t:'4. Cambia la atención 5 minutos', c:'<p>Elige algo que ocupe manos y cabeza:</p><button class="btn" data-a="nav" data-v="dibujo">Dibujar un mandala</button><button class="btn sec" data-a="nav" data-v="trazo">Trazos lentos</button><button class="btn sec" data-a="nav" data-v="memoria">Juego de memoria</button><button class="btn sec" data-a="nav" data-v="mente">Ejercicio mental</button><p class="mut">O sal a caminar 5 minutos.</p>'},
+  {t:'5. Si vuelve, está bien', c:'<p class="big">Cuando el pensamiento regrese, notarlo y volver a lo que estabas haciendo también es práctica.</p><p class="mut">No se trata de que desaparezca, sino de no quedarte atrapada en él.</p>'}
+];
+SCREENS.bucle = {title:'Salir del bucle', tab:'pensar',
+  html(){
+    const i = ST.paso || 0, p = PASOS_BUCLE[i];
+    return `<div class="mut">Paso ${i+1} de ${PASOS_BUCLE.length}</div>
+    <div class="card"><h2>${p.t}</h2>${p.c}</div>
+    <div class="row">${i>0?'<button class="btn sec small" data-a="pasoBucle" data-v="-1">Anterior</button>':''}
+    ${i<PASOS_BUCLE.length-1?'<button class="btn small" data-a="pasoBucle" data-v="1">Siguiente</button>':'<button class="btn small" data-a="nav" data-v="hoy">Terminar</button>'}</div>`;
+  }};
+
+/* ---- RESPIRACIÓN 3 MINUTOS ---- */
+SCREENS.respirar = {title:'Respirar 3 minutos', tab:'pensar',
+  html(){ return `<div class="card"><p id="fase" class="big">Cuando estés lista, toca Empezar.</p>
+    <div id="orb" class="orb"><span id="verbo"></span></div><p id="reloj" class="mut" style="text-align:center"></p></div>
+    <button class="btn" id="go" data-a="respStart">Empezar</button>`; }};
+function respStart(){
+  const orb=$('#orb'), t0=Date.now(), TOTAL=180;
+  orb.classList.add('run'); $('#go').style.display='none';
+  const iv = setInterval(()=>{
+    const s=(Date.now()-t0)/1000;
+    if(s>=TOTAL){ clearInterval(iv); orb.classList.remove('run'); $('#fase').textContent='Listo. Lleva esta atención amplia al resto del día.'; $('#verbo').textContent=''; $('#reloj').textContent=''; return; }
+    $('#fase').textContent = s<30 ? 'Nota qué hay ahora: pensamientos, emociones, sensaciones. Sin cambiarlos.'
+      : s<150 ? 'Lleva la atención a la respiración, al ritmo del círculo.' : 'Abre la atención a todo el cuerpo, sentada o de pie.';
+    $('#verbo').textContent = (s%10)<4 ? 'Inhala' : 'Exhala';
+    $('#reloj').textContent = Math.ceil(TOTAL-s)+' s';
+  },200);
+  cleanup = ()=>clearInterval(iv);
+}
+
+/* ---- ANCLAJE 5-4-3-2-1 ---- */
+const SENT = [['5','cosas que puedas VER','Mira alrededor y nómbralas'],['4','cosas que puedas TOCAR','La ropa, la mesa, tus manos'],
+  ['3','cosas que puedas OÍR','Cerca y lejos'],['2','cosas que puedas OLER','Si no huele nada, recuerda dos olores que te gusten'],['1','cosa que puedas SABOREAR','O recuerda un sabor']];
+SCREENS.anclaje = {title:'Anclaje 5-4-3-2-1', tab:'pensar',
+  html(){
+    const i = ST.sent || 0;
+    if(i >= SENT.length) return `<div class="card"><h2>Listo</h2><p>Respira una vez más. ¿Cómo está la velocidad de tu mente comparada con hace 2 minutos?</p></div><button class="btn" data-a="nav" data-v="hoy">Volver</button>`;
+    const s = SENT[i];
+    return `<div class="mut">${i+1} de 5</div><div class="card"><h2>${s[0]} ${s[1]}</h2><p>${s[2]}. Tómate tu tiempo.</p></div>
+    <button class="btn" data-a="sentSig">Listo, siguiente</button>`;
+  }};
+
+/* ---- REGISTRO DE PENSAMIENTO ---- */
+SCREENS.registro = {title:'Registro de pensamiento', tab:'pensar',
+  html(){
+    return `<div class="card soft"><p>Para revisar un pensamiento que te pesa. Un pensamiento no es un hecho: se puede examinar.</p></div>
+    <label>¿Qué pasó? (situación)</label><textarea id="r1"></textarea>
+    <label>¿Qué pensaste?</label><textarea id="r2"></textarea>
+    <label>¿Qué emoción sentiste y cuánta? <span id="v1">50</span>/100</label>
+    <input id="r3" type="text" placeholder="Ej: tristeza, culpa, rabia"><input id="e1" type="range" min="0" max="100" value="50">
+    <label>¿Qué hechos apoyan ese pensamiento?</label><textarea id="r4"></textarea>
+    <label>¿Qué hechos NO encajan con él?</label><textarea id="r5"></textarea>
+    <label>¿Qué pensamiento más equilibrado podrías tener?</label><textarea id="r6" placeholder="Algo que sea verdadero y más amable"></textarea>
+    <label>¿Cuánta emoción queda ahora? <span id="v2">50</span>/100</label><input id="e2" type="range" min="0" max="100" value="50">
+    <button class="btn" data-a="guardarRegistro">Guardar</button>`;
+  },
+  init(){ $('#e1').oninput = e => $('#v1').textContent = e.target.value; $('#e2').oninput = e => $('#v2').textContent = e.target.value; }};
+
+/* ---- AUTOCOMPASIÓN ---- */
+SCREENS.compasion = {title:'Háblate como a una amiga', tab:'pensar',
+  html(){
+    return `<div class="card"><p class="big">Si una amiga querida tuviera depresión y se sintiera como tú hoy, ¿qué le dirías?</p></div>
+    <textarea id="c1" placeholder="Escríbelo como si fuera para ella"></textarea>
+    <p class="mut">Ahora léelo en voz baja, como si fuera para ti.</p>
+    <button class="btn" data-a="guardarCompasion">Guardar para releer</button>
+    ${notas().filter(n=>n.k==='compasion').slice(-3).reverse().map(n=>`<div class="nota"><span class="mut">${esc(n.d)}</span><br>${esc(n.v)}</div>`).join('')}`;
+  }};
+
+/* ---- TRES COSAS BUENAS ---- */
+SCREENS.gracias = {title:'Tres cosas que salieron bien', tab:'pensar',
+  html(){
+    const prev = notas().filter(n=>n.k==='gracias').slice(-5).reverse();
+    return `<div class="card soft"><p>Pueden ser mínimas: un café rico, un mensaje, que saliera el sol. Escribirlas ayuda a notarlas. El efecto es pequeño pero real en algunas personas.</p></div>
+    <input id="g1" type="text" placeholder="1."><input id="g2" type="text" placeholder="2." style="margin-top:8px"><input id="g3" type="text" placeholder="3." style="margin-top:8px">
+    <button class="btn" data-a="guardarGracias">Guardar</button>
+    ${prev.length ? '<h3>Las de otros días (para releer en días difíciles)</h3>' + prev.map(n=>`<div class="nota"><span class="mut">${esc(n.d)}</span><br>${n.v.map(x=>'• '+esc(x)).join('<br>')}</div>`).join('') : ''}`;
+  }};
+
+/* ---- EJERCICIOS MENTALES ---- */
+SCREENS.mente = {title:'Ejercicio mental', tab:'pensar',
+  html(){
+    if(ST.mi === undefined) ST.mi = Math.floor(Math.random()*MENTE.length);
+    return `<div class="card"><p class="big">${esc(MENTE[ST.mi])}</p><p class="mut">Tómate 1–3 minutos. No hay respuestas correctas.</p></div>
+    <button class="btn" data-a="otraMente">Otro ejercicio</button>`;
+  }};
+
+/* ---- JUGAR (lista) ---- */
+SCREENS.jugar = {title:'Jugar y dibujar', tab:'jugar',
+  html(){
+    return `<p class="mut">Estas actividades ocupan manos y atención. Sirven para soltar un pensamiento repetitivo un rato. No curan la depresión, pero pueden dar un respiro.</p>
+    <button class="item" data-a="nav" data-v="jardin"><b>Mi jardín</b><span>Toca las plantas y mira cómo se mueven</span></button>
+    <button class="item" data-a="nav" data-v="dibujo"><b>Mandala con el dedo</b><span>Dibujas y se repite en simetría</span></button>
+    <button class="item" data-a="nav" data-v="trazo"><b>Trazos lentos</b><span>Sigue el punto con el dedo y respira</span></button>
+    <button class="item" data-a="nav" data-v="memoria"><b>Memoria de pares</b><span>Un juego tranquilo, sin tiempo</span></button>`;
+  }};
+
+/* ---- MI JARDÍN ---- */
+SCREENS.jardin = {title:'Mi jardín', tab:'jugar',
+  init(){ jardinInit(); },
+  html(){
+    return `<div class="card jcard">${jardinSVG()}</div>
+    <p>Pasa el dedo despacio por las hojas. Respira mientras las ves moverse.</p>
+    <div class="card soft"><b>Plantas: ${plantasVisibles()} de ${JARDIN.length}</b>
+    <p class="mut">El jardín crece con cada cosa pequeña que haces, cada registro de ánimo y cada nota que guardas. Los días difíciles también cuentan. No se marchita ni retrocede nunca.</p></div>
+    <p class="mut">Si tienes una planta de verdad cerca, tócala un momento: sentir las hojas y la tierra también ayuda a volver al presente.</p>`;
+  }};
+
+/* ---- MANDALA ---- */
+SCREENS.dibujo = {title:'Mandala', tab:'jugar',
+  html(){
+    return `<canvas id="cv"></canvas>
+    <div class="swatches">${COLORES.map((c,i)=>`<button data-a="color" data-v="${i}" style="background:${c}" class="${i===0?'on':''}" aria-label="color ${i+1}"></button>`).join('')}</div>
+    <div class="row"><button class="btn sec small" data-a="deshacer">Deshacer</button><button class="btn sec small" data-a="limpiar">Limpiar</button></div>
+    <p class="mut">Dibuja despacio. No importa cómo quede.</p>`;
+  },
+  init(){
+    const c=$('#cv'), ctx=c.getContext('2d'), dpr=window.devicePixelRatio||1;
+    const S=Math.min($('#view').clientWidth-28, 420);
+    c.width=S*dpr; c.height=S*dpr; c.style.width=S+'px'; c.style.height=S+'px'; ctx.scale(dpr,dpr);
+    const N=8, cx=S/2, cy=S/2;
+    ST.color=COLORES[0]; ST.strokes=[]; let cur=null;
+    const fondo=()=>{ ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--card'); ctx.fillRect(0,0,S,S); };
+    const tf=(p,i,m)=>{ const x=(p[0]-cx)*m, y=p[1]-cy, th=i*2*Math.PI/N, cs=Math.cos(th), sn=Math.sin(th); return [cx+x*cs-y*sn, cy+x*sn+y*cs]; };
+    const seg=(a,b,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=3; ctx.lineCap='round';
+      for(let i=0;i<N;i++) for(const m of [1,-1]){ const A=tf(a,i,m), B=tf(b,i,m); ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke(); } };
+    const redibujar=()=>{ fondo(); ST.strokes.forEach(s=>{ for(let k=1;k<s.p.length;k++) seg(s.p[k-1],s.p[k],s.c); }); };
+    const pos=e=>{ const r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+    c.onpointerdown=e=>{ c.setPointerCapture(e.pointerId); cur={c:ST.color,p:[pos(e)]}; ST.strokes.push(cur); };
+    c.onpointermove=e=>{ if(!cur) return; const p=pos(e); seg(cur.p[cur.p.length-1],p,cur.c); cur.p.push(p); };
+    c.onpointerup=c.onpointercancel=()=>{ cur=null; };
+    ST.redibujar=redibujar; redibujar();
+  }};
+
+/* ---- TRAZOS LENTOS ---- */
+SCREENS.trazo = {title:'Trazos lentos', tab:'jugar',
+  html(){
+    return `<canvas id="cv"></canvas>
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button class="btn sec small" data-a="forma" data-v="onda">Onda</button>
+      <button class="btn sec small" data-a="forma" data-v="espiral">Espiral</button>
+      <button class="btn sec small" data-a="forma" data-v="ocho">Infinito</button></div>
+    <p class="mut">Sigue el punto con el dedo, sin apurarte. Inhala y exhala al ritmo en que se mueve. No importa si te sales del camino.</p>`;
+  },
+  init(){
+    const c=$('#cv'), ctx=c.getContext('2d'), dpr=window.devicePixelRatio||1;
+    const S=Math.min($('#view').clientWidth-28, 420);
+    c.width=S*dpr; c.height=S*dpr; c.style.width=S+'px'; c.style.height=S+'px'; ctx.scale(dpr,dpr);
+    const formas={
+      onda:t=>[S*0.08+t*S*0.84, S/2+Math.sin(t*Math.PI*5)*S*0.22],
+      espiral:t=>{ const r=t*S*0.42, a=t*Math.PI*6; return [S/2+Math.cos(a)*r, S/2+Math.sin(a)*r]; },
+      ocho:t=>{ const a=t*Math.PI*2, d=1+Math.sin(a)**2; return [S/2+Math.cos(a)*S*0.42/d, S/2+Math.sin(a)*Math.cos(a)*S*0.8/d]; }
+    };
+    ST.forma = ST.forma || 'onda';
+    let usr=[], cur=null, t0=performance.now(), raf;
+    const DUR=60000;
+    const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n);
+    ST.setForma = f=>{ ST.forma=f; usr=[]; t0=performance.now(); };
+    const draw=now=>{
+      const f=formas[ST.forma], t=((now-t0)%DUR)/DUR;
+      ctx.fillStyle=css('--card'); ctx.fillRect(0,0,S,S);
+      ctx.strokeStyle=css('--line'); ctx.lineWidth=10; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath(); for(let k=0;k<=200;k++){ const p=f(k/200); k?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); } ctx.stroke();
+      ctx.strokeStyle=css('--acc'); ctx.lineWidth=3;
+      usr.forEach(s=>{ ctx.beginPath(); s.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); });
+      const d=f(t); ctx.fillStyle=css('--warn'); ctx.beginPath(); ctx.arc(d[0],d[1],10,0,7); ctx.fill();
+      raf=requestAnimationFrame(draw);
+    };
+    const pos=e=>{ const r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+    c.onpointerdown=e=>{ c.setPointerCapture(e.pointerId); cur=[pos(e)]; usr.push(cur); };
+    c.onpointermove=e=>{ if(cur) cur.push(pos(e)); };
+    c.onpointerup=c.onpointercancel=()=>{ cur=null; };
+    raf=requestAnimationFrame(draw);
+    cleanup=()=>cancelAnimationFrame(raf);
+  }};
+
+/* ---- MEMORIA ---- */
+SCREENS.memoria = {title:'Memoria de pares', tab:'jugar',
+  html(){
+    return `<div class="row" style="justify-content:center"><button class="btn sec small" data-a="nivel" data-v="6">Fácil</button><button class="btn sec small" data-a="nivel" data-v="8">Más cartas</button></div>
+    <div id="grid" class="grid"></div><p style="text-align:center">Movimientos: <b id="movs">0</b></p><p id="fin" class="big" style="text-align:center"></p>`;
+  },
+  init(){
+    const EM=['🌿','🌙','☀️','🐦','🌊','🍵','🎧','🧶'], n=ST.memN||6;
+    const cartas=[...EM.slice(0,n),...EM.slice(0,n)].sort(()=>Math.random()-.5);
+    let abiertas=[], bloq=false, movs=0, pares=0;
+    const g=$('#grid');
+    g.innerHTML=cartas.map((e,i)=>`<button class="carta" data-i="${i}" aria-label="carta"><span>${e}</span></button>`).join('');
+    g.onclick=ev=>{
+      const b=ev.target.closest('.carta');
+      if(!b||bloq||b.classList.contains('up')) return;
+      b.classList.add('up'); abiertas.push(b);
+      if(abiertas.length===2){
+        movs++; $('#movs').textContent=movs;
+        const [a,c]=abiertas;
+        if(cartas[a.dataset.i]===cartas[c.dataset.i]){
+          pares++; a.classList.add('ok'); c.classList.add('ok'); abiertas=[];
+          if(pares===n) $('#fin').textContent='¡Listo en '+movs+' movimientos! Respira y nota cómo está tu mente.';
+        }else{
+          bloq=true; setTimeout(()=>{ a.classList.remove('up'); c.classList.remove('up'); abiertas=[]; bloq=false; },800);
+        }
+      }
+    };
+  }};
+
+/* ---- AVANCE ---- */
+function graficoAnimo(){
+  const M=moods(), W=280, H=100;
+  const dias=[...Array(14)].map((_,i)=>{ const d=new Date(); d.setDate(d.getDate()-13+i); return d; });
+  let s=`<svg viewBox="0 0 ${W} ${H+16}" width="100%" role="img" aria-label="Ánimo de los últimos 14 días">`;
+  dias.forEach((d,i)=>{
+    const v=M[hoyKey(d)], x=i*20+4;
+    if(v){ const h=v*18; s+=`<rect x="${x}" y="${H-h}" width="14" height="${h}" rx="4" fill="var(--acc)"/>`; }
+    else s+=`<circle cx="${x+7}" cy="${H-3}" r="2.5" fill="var(--line)"/>`;
+    s+=`<text x="${x+7}" y="${H+13}" font-size="9" text-anchor="middle" fill="var(--mut)">${'DLMXJVS'[d.getDay()]}</text>`;
+  });
+  return s+'</svg>';
+}
+function resumenTexto(){
+  const M=moods(), H=hechas(), lineas=[];
+  for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const v=M[hoyKey(d)]; if(v) lineas.push(`${d.getDate()}/${d.getMonth()+1}: ${v}/5`); }
+  const desde=hoyKey(new Date(Date.now()-13*864e5));
+  const nHechas=H.filter(h=>h.d>=desde).length;
+  return `Resumen de los últimos 14 días (app Paso a Paso)\nÁnimo (1 muy bajo – 5 muy bien): ${lineas.length?lineas.join(', '):'sin registros'}\nCosas pequeñas hechas: ${nHechas}`;
+}
+SCREENS.avance = {title:'Avance', tab:'avance',
+  html(){
+    const M=moods(), vals=Object.keys(M).filter(k=>k>=hoyKey(new Date(Date.now()-13*864e5))).map(k=>M[k]);
+    const prom = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '—';
+    const nh = hechas().filter(h=>h.d>=hoyKey(new Date(Date.now()-6*864e5))).length;
+    return `<div class="card"><b>Ánimo, últimos 14 días</b>${graficoAnimo()}
+      <p class="mut">Promedio: ${prom} de 5 · Cosas pequeñas esta semana: ${nh}</p>
+      <p class="mut">No es una racha ni un puntaje que mantener. Los días bajos también cuentan; esto solo sirve para ver el panorama y comentarlo con tu equipo de salud.</p></div>
+    <button class="btn" data-a="copiar">Copiar resumen para mi terapeuta o psiquiatra</button>
+    ${notas().filter(n=>n.k==='pensamiento').slice(-3).reverse().map(n=>`<div class="card"><span class="mut">${esc(n.d)}</span><p><b>Pensamiento:</b> ${esc(n.v.pensamiento)}</p><p><b>Más equilibrado:</b> ${esc(n.v.alternativa)}</p><p class="mut">Emoción: ${n.v.antes} → ${n.v.despues}</p></div>`).join('')}`;
+  }};
+
+/* ---- AJUSTES ---- */
+SCREENS.ajustes = {title:'Ajustes', tab:'ajustes',
+  html(){
+    const S=ajustes();
+    return `<h3 style="margin-top:2px">Avisos del día</h3>
+    <div class="card">${SLOTS.map(s=>`<div class="slot"><input type="checkbox" id="on_${s.k}" ${S.slots[s.k].on?'checked':''} style="width:22px;height:22px;accent-color:var(--acc)">
+      <label class="n" for="on_${s.k}" style="margin:0">${s.nombre}</label><input type="time" id="t_${s.k}" value="${S.slots[s.k].t}"></div>`).join('')}
+      <button class="btn" data-a="guardarAvisos">Guardar y programar</button>
+      <button class="btn sec" data-a="probarAviso">Probar un aviso (en 5 segundos)</button>
+      <p id="estado" class="mut"></p>
+      <p class="mut">Los avisos se programan para 3 semanas. Cada vez que abres la app se renuevan.</p></div>
+    <button class="item" data-a="nav" data-v="acerca"><b>Acerca de esta app</b><span>En qué se basa y qué límites tiene</span></button>
+    <button class="item" data-a="nav" data-v="ayuda"><b>Ayuda ahora</b><span>Teléfonos de apoyo en Chile</span></button>
+    <button class="item" data-a="borrar"><b>Borrar mis datos</b><span>Elimina ánimo, notas y ajustes de este celular</span></button>`;
+  }};
+
+/* ---- ACERCA DE ---- */
+SCREENS.acerca = {title:'Acerca de', tab:'ajustes',
+  html(){
+    return `<div class="card"><p><b>Paso a Paso</b> junta ideas de enfoques con respaldo en estudios sobre depresión. Ayudan a algunas personas más que a otras y funcionan mejor como complemento de tu tratamiento.</p>
+    <p><b>No reemplaza</b> a tu psiquiatra ni a tu terapeuta ni a tu medicación. Si algo de esto no te sirve, no es un fracaso tuyo: coméntalo en tu próxima sesión.</p></div>
+    <h3>En qué se basa cada parte</h3>
+    <ul class="clean">
+      <li><b>Cosas pequeñas del día:</b> activación conductual (terapia que parte por actuar, no por esperar las ganas). Hay ensayos clínicos amplios, por ejemplo el estudio COBRA (Richards y cols., Lancet, 2016).</li>
+      <li><b>Salir del bucle:</b> terapia cognitivo-conductual enfocada en la rumiación (Watkins y cols.): pasar de "¿por qué?" a lo concreto y a acciones pequeñas.</li>
+      <li><b>Respiración de 3 minutos y anclaje:</b> prácticas de atención plena de la terapia cognitiva basada en mindfulness (Segal, Williams y Teasdale).</li>
+      <li><b>Registro de pensamiento:</b> reestructuración cognitiva de la terapia cognitiva clásica (Beck).</li>
+      <li><b>Moverse y caminar:</b> el ejercicio muestra efectos en depresión en revisiones como Cochrane (2013) y un metaanálisis publicado en BMJ (2024).</li>
+      <li><b>Tres cosas buenas:</b> ejercicio de psicología positiva (Seligman y cols., 2005); el efecto es modesto.</li>
+      <li><b>Juegos, dibujo y jardín:</b> aquí la evidencia es más débil. Se incluyen como tareas absorbentes y sensoriales que ayudan a interrumpir la rumiación un rato, no como tratamiento. El jardín solo crece: no tiene castigos ni rachas.</li>
+    </ul>
+    <p class="mut">Lo que escribes se guarda solo en este celular. La app no envía nada a internet.</p>`;
+  }};
+
+/* ---- AYUDA AHORA ---- */
+SCREENS.ayuda = {title:'Ayuda ahora', tab:'hoy',
+  html(){
+    return `<div class="card warn"><p class="big">Si estás pensando en hacerte daño o sientes que no puedes más, pide ayuda ahora. No tienes que estar sola con esto.</p></div>
+    <a class="btn" href="tel:%2A4141">Llamar al *4141</a>
+    <p class="mut">Línea de prevención del suicidio del Ministerio de Salud. Gratuita, todos los días, las 24 horas, desde celular.</p>
+    <a class="btn sec" href="tel:6003607777">Salud Responde: 600 360 7777</a>
+    <p class="mut">Marca la opción 2 (salud mental).</p>
+    <a class="btn sec" href="tel:131">Emergencia médica: 131</a>
+    <p class="mut">Si estás en peligro inmediato.</p>
+    <div class="card" style="margin-top:14px"><b>Mientras tanto</b><ul class="clean"><li>Avísale a una persona de confianza y pídele que se quede contigo.</li>
+    <li>Aléjate de cualquier cosa con la que podrías hacerte daño.</li>
+    <li>Si tienes psiquiatra o terapeuta, escríbele o llama hoy.</li></ul></div>`;
+  }};
+
+/* ---------------------------------------------------------------------
+   ACCIONES (lo que pasa cuando tocas un botón con data-a="...")
+   --------------------------------------------------------------------- */
+const ACT = {
+  nav:   el => nav(el.dataset.v),
+  back:  () => history.back(),
+  activar: async () => { const r = await programar(true); toast(r.msg); render(); },
+  hecho: el => { const h=hechas(); h.push({d:hoyKey(), id:el.dataset.id}); store.set('hechas',h); toast(ALIENTO[Math.floor(Math.random()*ALIENTO.length)]); render(); },
+  minima:() => { ST.minima=true; render(); },
+  otra:  () => { const sk=store.get('skip',{d:'',n:0}); const n=(sk.d===hoyKey()?sk.n:0)+1; store.set('skip',{d:hoyKey(),n}); ST.minima=false; render(); },
+  animo: el => { const M=moods(); M[hoyKey()]=+el.dataset.v; store.set('animos',M); toast('Anotado. Gracias por registrarlo.'); render(); },
+  pesadoHecho: () => toast('Con eso basta por ahora. Gracias por hacerlo.'),
+  pasoBucle: el => { ST.paso=Math.max(0,(ST.paso||0)+(+el.dataset.v)); render(); },
+  respStart: () => respStart(),
+  sentSig: () => { ST.sent=(ST.sent||0)+1; render(); },
+  otraMente: () => { let n; do{ n=Math.floor(Math.random()*MENTE.length); }while(n===ST.mi); ST.mi=n; render(); },
+  guardarRegistro: () => {
+    const v={situacion:$('#r1').value, pensamiento:$('#r2').value, emocion:$('#r3').value, antes:$('#e1').value, favor:$('#r4').value, contra:$('#r5').value, alternativa:$('#r6').value, despues:$('#e2').value};
+    if(!v.pensamiento.trim()) return toast('Escribe al menos el pensamiento.');
+    const n=notas(); n.push({d:hoyKey(), k:'pensamiento', v}); store.set('notas',n); toast('Guardado.'); nav('avance',true);
+  },
+  guardarCompasion: () => { const t=$('#c1').value.trim(); if(!t) return toast('Escribe algo primero.'); const n=notas(); n.push({d:hoyKey(),k:'compasion',v:t}); store.set('notas',n); toast('Guardado.'); render(); },
+  guardarGracias: () => { const v=['#g1','#g2','#g3'].map(s=>$(s).value.trim()).filter(Boolean); if(!v.length) return toast('Escribe al menos una.'); const n=notas(); n.push({d:hoyKey(),k:'gracias',v}); store.set('notas',n); toast('Guardado. Buen trabajo.'); render(); },
+  color: el => { ST.color=COLORES[+el.dataset.v]; document.querySelectorAll('.swatches button').forEach((b,i)=>b.classList.toggle('on',i===+el.dataset.v)); },
+  deshacer: () => { ST.strokes.pop(); ST.redibujar(); },
+  limpiar: () => { ST.strokes.length=0; ST.redibujar(); },
+  forma: el => ST.setForma(el.dataset.v),
+  nivel: el => { ST.memN=+el.dataset.v; render(); },
+  copiar: async () => {
+    const t=resumenTexto();
+    try{ await navigator.clipboard.writeText(t); toast('Resumen copiado. Pégalo en un mensaje.'); }
+    catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Resumen copiado.');}catch(_){toast('No se pudo copiar.');} ta.remove(); }
+  },
+  guardarAvisos: async () => {
+    const S=ajustes(); SLOTS.forEach(s=>{ S.slots[s.k]={on:$('#on_'+s.k).checked, t:$('#t_'+s.k).value||s.t}; }); store.set('ajustes',S);
+    const r=await programar(true); $('#estado').textContent=r.msg; toast(r.ok?'Avisos programados.':'Revisa el mensaje.');
+  },
+  probarAviso: async () => { const r=await avisoDePrueba(); $('#estado').textContent=r.msg; },
+  borrar: () => { if(confirm('¿Borrar todos tus datos de esta app? No se puede deshacer.')){ Object.keys(localStorage).filter(k=>k.startsWith('pp_')).forEach(k=>localStorage.removeItem(k)); toast('Datos borrados.'); nav('hoy',true); } }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if(el && ACT[el.dataset.a]) ACT[el.dataset.a](el);
+});
+
+/* ---------------------------------------------------------------------
+   NAVEGACIÓN (usa el historial: el botón "atrás" del celular funciona)
+   --------------------------------------------------------------------- */
+function nav(id, reemplazar){
+  if(!SCREENS[id]) id = 'hoy';
+  const actual = location.hash.slice(1) || 'hoy';
+  if(id !== actual){
+    if(reemplazar || TABS.some(t=>t.id===id)) history.replaceState(null,'','#'+id);
+    else history.pushState(null,'','#'+id);
+  }
+  if(id !== actual) ST = {};
+  render();
+}
+function render(){
+  if(cleanup){ cleanup(); cleanup=null; }
+  let id = location.hash.slice(1) || 'hoy';
+  if(!SCREENS[id]) id = 'hoy';
+  const s = SCREENS[id];
+  $('#ttl').innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20C4 11 9 4 20 3c1 10-4 17-13 17z"/><path d="M5 20C8 15 11 12 15 9" stroke="var(--bg)" stroke-width="1.5" fill="none"/></svg><span>' + esc(s.title) + '</span>';
+  $('#back').style.display = TABS.some(t=>t.id===id) ? 'none' : 'block';
+  $('#view').innerHTML = s.html();
+  $('#view').scrollTop = 0;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === s.tab));
+  if(s.init) s.init();
+}
+window.addEventListener('popstate', () => { ST = {}; render(); });
+
+/* ---------------------------------------------------------------------
+   5. ARRANQUE
+   --------------------------------------------------------------------- */
+$('#tabs').innerHTML = TABS.map(t => `<button data-a="nav" data-v="${t.id}"><svg viewBox="0 0 24 24">${t.i}</svg>${t.n}</button>`).join('');
+render();
+// Cada vez que abres la app, renueva los avisos (sin molestar si no hay permiso).
+if(ajustes().visto) programar(false);
+</script>
+</body>
+</html>

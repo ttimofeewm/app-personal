@@ -1,0 +1,8 @@
+{
+  "appId": "cl.tania.pasoapaso",
+  "appName": "Paso a Paso",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
